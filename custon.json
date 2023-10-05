@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Smith, J. & Doe, J.",
+        "date": "2022",
+        "author": "J. Smith & J. Doe",
+        "reference": "An Introduction to Programming. Tech Publishers."
+    },
+    {
+        "name": "Dylan, B.",
+        "date": "2020",
+        "author": "B. Dylan",
+        "reference": "Advanced Algorithms and Their Applications. Algorithmic Press."
+    },
+    {
+        "name": "Morrison, M. & Turner, T.",
+        "date": "2021",
+        "author": "M. Morrison & T. Turner",
+        "reference": "Database Systems: A Comprehensive Guide. Database Publications."
+    }
+]
