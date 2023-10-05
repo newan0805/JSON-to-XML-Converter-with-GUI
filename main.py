@@ -61,6 +61,7 @@ def save_xml_file():
 root = tk.Tk()
 root.title("JSON to XML Converter")
 root.geometry('800x600')
+root.resizable(False, False)
 
 frame = tk.Frame(root, bg="white")
 frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
