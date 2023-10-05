@@ -6,11 +6,6 @@ from tkinter import filedialog, Text, scrolledtext
 
 
 def create_xml(data):
-    nsmap = {
-        "b": "http://schemas.openxmlformats.org/officeDocument/2006/bibliography",
-        "ns1": "http://schemas.openxmlformats.org/officeDocument/2006/bibliography/bib1",
-    }
-
     sources = Element("b:Sources", attrib={
         "xmlns:b": "http://schemas.openxmlformats.org/officeDocument/2006/bibliography",
         "xmlns:ns1": "http://schemas.openxmlformats.org/officeDocument/2006/bibliography/bib1"
@@ -18,17 +13,27 @@ def create_xml(data):
 
     for entry in data:
         source = SubElement(sources, 'b:Source')
-        SubElement(source, 'b:Tag').text = entry['name'].split(',')[0].replace(" ", "") + entry['date']
+        
+        name_tag = entry.get('name', '').split(',')[0].replace(" ", "")
+        date = entry.get('date', '')
+        SubElement(source, 'b:Tag').text = name_tag + date
+        
         SubElement(source, 'b:SourceType').text = "Book"
         author = SubElement(source, 'b:Author')
-        for auth in entry['author'].split('&'):
+        
+        authors = entry.get('author', '').split('&')
+        for auth in authors:
             ind_author = SubElement(author, 'b:Author')
             names = auth.strip().split()
-            SubElement(ind_author, 'b:Last').text = names[1].replace(".", "")
+            last_name = names[1] if len(names) > 1 else names[0]
+            SubElement(ind_author, 'b:Last').text = last_name.replace(".", "")
             SubElement(ind_author, 'b:First').text = names[0]
-        SubElement(source, 'b:Year').text = entry['date']
-        SubElement(source, 'b:Title').text = entry['reference'].split(".")[0]
-        SubElement(source, 'b:Publisher').text = entry['reference'].split('.')[1].strip()
+        
+        SubElement(source, 'b:Year').text = date
+        title = entry.get('reference', '').split(".")[0]
+        SubElement(source, 'b:Title').text = title
+        publisher = entry.get('reference', '').split('.')[1] if '.' in entry.get('reference', '') else ''
+        SubElement(source, 'b:Publisher').text = publisher.strip()
 
     return parseString(tostring(sources)).toprettyxml(indent="  ")
 
@@ -39,7 +44,6 @@ def convert_json_to_xml():
     xml_content = create_xml(data)
     xml_text.delete("1.0", tk.END)
     xml_text.insert(tk.END, xml_content)
-
 
 def open_file():
     file_path = filedialog.askopenfilename()
